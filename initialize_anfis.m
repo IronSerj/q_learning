@@ -6,7 +6,8 @@ function [ fis ] = initialize_anfis( training_set )
     %numMFs = 3;
     %mfType = 'gaussmf';
     %in_fis = genfis1(training_set, numMFs, mfType);
-    fis = genfis2(training_set(1:length(training_set), 1:4), training_set(1:length(training_set), 5), 0.6);
+    s = size(training_set);
+    fis = genfis2(training_set(1:s(1), 1:4), training_set(1:s(1), 5), 0.6);
     
     %epoch_n = 20;
     %dispOpt = zeros(1,4);
