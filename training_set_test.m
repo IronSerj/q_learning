@@ -13,7 +13,7 @@ function [ ] = training_set_test( training_set, sample_time )
         end
     end
         
-    actions(length(actions) + 1) = 0;
+    actions(length(actions) + 1) = 0
     t = 0:sample_time:((length(actions) - 1)*sample_time);
 
     lsim(sys_tf, actions, t)

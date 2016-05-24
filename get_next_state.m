@@ -5,7 +5,6 @@ function [ result ] = get_next_state( sys_tf, actions, sample_time )
     interaction_result = lsim(sys_tf, actions, t);
     state = interaction_result(length(interaction_result) - 1, [1, 2]);
     next_state = interaction_result(length(interaction_result), [1, 2]);
-    result = next_state;
     
     result(1) = next_state(1) - state(1);
     if next_state(2) == 0
@@ -14,14 +13,14 @@ function [ result ] = get_next_state( sys_tf, actions, sample_time )
         result(1) = result(1) * next_state(2) / abs(next_state(2));
     end
     
-    result(2) = abs(next_state(2));
+    result(2) = next_state(2);
     
-    result(3) = dist(state(2), next_state(2));
+    %result(3) = dist(state(2), next_state(2));
 
     if next_state(2) * state(2) <= 0 % если маятник перевалился на другую сторону
-        result(3) = result(3) * -1;
-    elseif abs(next_state(2)) > abs(state(2)) % если маятник падает
-        result(3) = result(3) * -1;
+        result(3) = (abs(next_state(2)) + abs(state(2))) * -1;
+    else
+        result(3) = abs(state(2)) - abs(next_state(2)); % (-) если маятник падает, (+) если идет вверх
     end
 end
 
