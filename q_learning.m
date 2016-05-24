@@ -28,6 +28,9 @@ function [ fis, extended_training_set, extended_actions, new_state ] = q_learnin
     
     if abs(new_state(2)) > 0.5 % Если маятник упал
         fprintf('%d actions, %d iteration;\n', length(extended_actions), iteration);
+        if length(extended_actions) > 45
+            extended_actions
+        end
         fis = initialize_anfis(extended_training_set);
         %sample = extended_training_set(1:length(extended_training_set), 1:4);
         %extended_training_set = cat(2, sample, evalfis(sample, fis));
@@ -35,5 +38,8 @@ function [ fis, extended_training_set, extended_actions, new_state ] = q_learnin
             %[ extended_training_set ] = recalculate_trainig_set(fis, extended_training_set, gamma, FORCE_VALUES);
         end
         [ ~, extended_actions, new_state ] = initialize_episode(sys_tf, sample_time );
+    end
+    if rem(iteration, 1000) == 0
+        [ extended_training_set ] = recalculate_trainig_set(fis, extended_training_set, gamma, FORCE_VALUES);
     end
 end
