@@ -10,7 +10,7 @@ function [ new_state, reward ] = get_reward( sys_tf, actions, sample_time )
     
     new_state = get_next_state( sys_tf, actions, sample_time );
 
-    if abs(new_state(2)) > 0.5
+    if abs(new_state(2)) > 0.9
         reward = -1;
     else
         reward = 0;

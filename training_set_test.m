@@ -1,6 +1,8 @@
-function [ ] = training_set_test( training_set, sample_time )
+function [ ] = training_set_test( training_set, sample_time, fis )
     
-    fis = initialize_anfis( training_set );
+    if nargin < 3
+        fis = initialize_anfis( training_set );
+    end
     sys_tf = initialize_pendulum();
     
     [ ~, actions, state ] = initialize_episode( sys_tf, sample_time );
@@ -8,12 +10,12 @@ function [ ] = training_set_test( training_set, sample_time )
         [~, action] = get_preferable_action( fis, state, -1:0.1:1);
         actions = extend_actions_set( actions, state, action );
         [ state, ~ ] = get_reward( sys_tf, actions, sample_time );
-        if abs(state(2)) > 0.5
+        if abs(state(2)) > 0.9
             break;
         end
     end
         
-    actions(length(actions) + 1) = 0
+    actions(length(actions) + 1) = 0;
     t = 0:sample_time:((length(actions) - 1)*sample_time);
 
     lsim(sys_tf, actions, t)
