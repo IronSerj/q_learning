@@ -8,6 +8,7 @@ function [ fis, extended_training_set, extended_actions, new_state ] = q_learnin
     %MAX_SET_SIZE = 800;
     
     tss = size(training_set);
+    epsilon = 1;
     if rand() > epsilon && tss(1) > BASE_SET_SIZE
         [~, a] = get_preferable_action(fis, state, FORCE_VALUES);
     else
@@ -19,16 +20,16 @@ function [ fis, extended_training_set, extended_actions, new_state ] = q_learnin
     
     [new_state, reward] = get_reward(sys_tf, extended_actions, sample_time);
     base_reward = reward;
-    if abs(new_state(2)) <= 0.9 && tss(1) > BASE_SET_SIZE % ≈сли ма€тник не упал и размер обучающей выборки достаточен
+    if abs(new_state(1)) <= 0.9 && tss(1) > BASE_SET_SIZE % ≈сли ма€тник не упал и размер обучающей выборки достаточен
         [next_reward, ~] = get_preferable_action(fis, new_state, FORCE_VALUES);
         reward = reward + gamma * next_reward;
     end
 
     extended_training_set = extend_training_set( training_set, state, a, reward, base_reward, new_state );
     
-    if abs(new_state(2)) > 0.9 % ≈сли ма€тник упал
+    if abs(new_state(1)) > 0.9 % ≈сли ма€тник упал
         fprintf('%d actions, %d iteration;\n', length(extended_actions), iteration);
-        fis = initialize_anfis(extended_training_set(1:length(extended_training_set), 1:5));
+        fis = initialize_anfis(extended_training_set);
         %sample = extended_training_set(1:length(extended_training_set), 1:4);
         %extended_training_set = cat(2, sample, evalfis(sample, fis));
         if tss(1) > BASE_SET_SIZE

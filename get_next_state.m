@@ -6,23 +6,23 @@ function [ result ] = get_next_state( sys_tf, actions, sample_time )
     state = interaction_result(length(interaction_result) - 1, [1, 2]);
     next_state = interaction_result(length(interaction_result), [1, 2]);
     
-    result(1) = dist(next_state(1), state(1));
+    %result(1) = dist(next_state(1), state(1));
     %if next_state(2) == 0
     %    result(1) = result(1) * -1;
     %else
     %    result(1) = result(1) * next_state(2) / abs(next_state(2));
     %end
     
-    result(2) = next_state(2);
+    result(1) = next_state(2);
     
     %result(3) = dist(state(2), next_state(2));
 
     if next_state(2) * state(2) <= 0 % если маятник перевалился на другую сторону
-        result(3) = (abs(next_state(2)) + abs(state(2))) * -1;
+        result(2) = (abs(next_state(2)) + abs(state(2))) * -1;
     else
-        result(3) = abs(state(2)) - abs(next_state(2)); % (-) если маятник падает, (+) если идет вверх
+        result(2) = abs(state(2)) - abs(next_state(2)); % (-) если маятник падает, (+) если идет вверх
     end
     
-    result(1) = result(1) * result(3) / abs(result(3));
+    %result(1) = result(1) * result(3) / abs(result(3));
 end
 

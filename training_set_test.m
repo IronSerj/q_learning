@@ -10,7 +10,7 @@ function [ ] = training_set_test( training_set, sample_time, fis )
         [~, action] = get_preferable_action( fis, state, -1:0.1:1);
         actions = extend_actions_set( actions, state, action );
         [ state, ~ ] = get_reward( sys_tf, actions, sample_time );
-        if abs(state(2)) > 0.9
+        if abs(state(1)) > 0.9
             break;
         end
     end
