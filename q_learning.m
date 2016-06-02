@@ -1,4 +1,4 @@
-function [ fis, extended_training_set, extended_actions, new_state ] = q_learning( fis, sys_tf, training_set, actions, state, iteration, sample_time, epsilon, gamma )
+function [ fis, extended_training_set, extended_actions, new_state, episode_durations ] = q_learning( fis, sys_tf, training_set, actions, state, iteration, episode_durations, sample_time, epsilon, gamma )
     %   fis - нечетка€ система
     %   training_set - обучающее множество
     %   extended_training_set - обучающее множество, расширенное новым
@@ -8,7 +8,6 @@ function [ fis, extended_training_set, extended_actions, new_state ] = q_learnin
     %MAX_SET_SIZE = 800;
     
     tss = size(training_set);
-    epsilon = 1;
     if rand() > epsilon && tss(1) > BASE_SET_SIZE
         [~, a] = get_preferable_action(fis, state, FORCE_VALUES);
     else
@@ -30,6 +29,8 @@ function [ fis, extended_training_set, extended_actions, new_state ] = q_learnin
     if abs(new_state(1)) > 0.9 % ≈сли ма€тник упал
         fprintf('%d actions, %d iteration;\n', length(extended_actions), iteration);
         fis = initialize_anfis(extended_training_set);
+        episode_durations(length(episode_durations) + 1) = length(extended_actions);
+        plot(episode_durations);
         %sample = extended_training_set(1:length(extended_training_set), 1:4);
         %extended_training_set = cat(2, sample, evalfis(sample, fis));
         if tss(1) > BASE_SET_SIZE
